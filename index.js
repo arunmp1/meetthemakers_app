@@ -40,7 +40,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs"); 
 
 app.get('/', (req, res) => {
-  res.render('index'); // Ensure index.ejs exists inside views/
+  res.render(__dirname + "/views/index.ejs"); // Ensure index.ejs exists inside views/
 });
 
 
