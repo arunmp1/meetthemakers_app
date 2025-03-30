@@ -7,7 +7,6 @@ const commentModel = require('./models/comment')
 const postModel = require('./models/post')
 const contactModel = require('./models/contact')
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const multer = require('multer')
@@ -310,55 +309,53 @@ app.post('/signup', async function(request,response){
       message:"User Already registered"
     })
   }else{
-    bcrypt.genSalt(10,function(error,salt){
-      bcrypt.hash(password,salt,async function(error,hash){
-        let user = await userModel.create({
-          name,
-          email,
-          password:hash,
-        })
-        let token = jwt.sign({email:email,uid:user._id},secretKey)
-        response.cookie("token",token)
-        return response.status(200).json({
-          status:'success',
-          message:'Registration successfull'
-        })
+    let user = await userModel.create({
+      name,
+      email,
+      password,  // ⚠ Plain text password (Not recommended!)
+    });
+
+    let token = jwt.sign({ email: email, uid: user._id }, secretKey);
+    response.cookie("token", token);
     
-      })
-    })
+    return response.status(200).json({
+      status: 'success',
+      message: 'Registration successful'
+    });
   }
-})
+});
 
-app.post('/login',async function(request,response){
-  let {email,password} = request.body;
-  let user = await userModel.findOne({email})
-  if(!user){
+app.post('/login', async function(request, response) {
+  let { email, password } = request.body;
+  let user = await userModel.findOne({ email });
+
+  if (!user) {
     return response.status(401).json({
-      status:'error',
-      message:'Either Email-Id or Password is Incorrect'
-    })
-  }else{
-    console.log("User does exist")
-    bcrypt.compare(password,user.password,function(error,result){
-      if(result){
-        console.log("Correct")
-        let token = jwt.sign({email:email,uid:user._id},secretKey)
-        response.cookie("token",token)
-        response.status(200).json({
-          status:'success',
-          message:'Login Successful'
-        })
-      }else{
-       return response.status(401).json({
-        status:'error',
-        message:'Either Email-Id or Password is Incorrect'
-       })
-      }
-    })
+      status: 'error',
+      message: 'Either Email-Id or Password is Incorrect'
+    });
   }
 
-})
-      
+  console.log("User does exist");
+
+  // Compare passwords (assuming passwords are stored as plain text, which is NOT recommended)
+  if (password === user.password) {  // ✅ Fixed: Using direct comparison
+    console.log("Correct");
+    let token = jwt.sign({ email: email, uid: user._id }, secretKey);
+    response.cookie("token", token);
+    return response.status(200).json({
+      status: 'success',
+      message: 'Login Successful'
+    });
+  } else {
+    return response.status(401).json({
+      status: 'error',
+      message: 'Incorrect Password'
+    });
+  }
+});
+
+
 app.get('/logout',function(request,response){
   response.cookie('token','')
   response.redirect('/login');
