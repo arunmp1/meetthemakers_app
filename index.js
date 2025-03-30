@@ -725,7 +725,6 @@ function adminMiddleWare(request,response,next){
 const mongoURI = process.env.COSMOSDB_CONNECTION_STRING;
 
 mongoose.connect(mongoURI, { 
-  useUnifiedTopology: true 
 })
 
 .then(() => console.log('✅ MongoDB connected successfully'))
