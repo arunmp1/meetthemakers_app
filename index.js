@@ -43,6 +43,10 @@ app.get('/', (req, res) => {
   res.render(__dirname + "/views/index.ejs"); // Ensure index.ejs exists inside views/
 });
 
+app.get('/contact', (req, res) => {
+  res.render(__dirname + "/views/contact.ejs");
+});
+
 
 app.get('/',isLoggedIn,async function(request,response){
   if(!request.user){
