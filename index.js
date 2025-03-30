@@ -1,17 +1,17 @@
-const express = require('express')
+const express = require('express');
 const app = express();
-const path = require('path')
-const userModel = require('./models/user')
-const requirementModel = require('./models/requirement')
-const commentModel = require('./models/comment')
-const postModel = require('./models/post')
-const contactModel = require('./models/contact')
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
-const multer = require('multer')
-const adminModel = require('./models/admin')
-const { allowedNodeEnvironmentFlags } = require('process')
+const path = require('path');
+const userModel = require('./models/user');
+const requirementModel = require('./models/requirement');
+const commentModel = require('./models/comment');
+const postModel = require('./models/post');
+const contactModel = require('./models/contact');
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const adminModel = require('./models/admin');
+const { allowedNodeEnvironmentFlags } = require('process');
 require('dotenv').config();
 
 
