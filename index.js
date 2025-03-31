@@ -13,6 +13,7 @@ const multer = require('multer');
 const adminModel = require('./models/admin');
 const { allowedNodeEnvironmentFlags } = require('process');
 require('dotenv').config();
+const fs = require('fs');
 
 
 
@@ -729,7 +730,8 @@ function adminMiddleWare(request,response,next){
 const mongoURI = process.env.COSMOSDB_CONNECTION_STRING;
 
 mongoose.connect(mongoURI, { 
-})
+  ssl: true,
+  replicaSet: 'globaldb'})
 
 .then(() => console.log('✅ MongoDB connected successfully'))
 .catch(err => console.error('❌ MongoDB connection error:', err));
